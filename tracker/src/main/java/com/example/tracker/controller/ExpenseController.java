@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -24,23 +25,20 @@ public class ExpenseController {
         this.repo=repo;
     }
 
-    @RequestMapping(value="/expenses",method= RequestMethod.GET)
-    Collection<Expense> categories(){
+    @GetMapping("/expenses")
+    List<Expense> getExpenses(){
         return repo.findAll();
     }
 
-
-    @DeleteMapping("/expense/{id}")
-    ResponseEntity<?> deleteCategory(@PathVariable Long id) {
-        repo.deleteById(id);
+    @DeleteMapping("/expenses/{id}")
+    ResponseEntity<?>  deleteExpense(@PathVariable Long id){
+       repo.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/expenses")
-    ResponseEntity<Expense> createCategory(@RequestBody Expense exp)
-            throws URISyntaxException {
-        Expense result= repo.save(exp);
-        return ResponseEntity.created(new URI("/api/expense" + result.getId())).body(result);
-
+    ResponseEntity<Expense> createExpense(@RequestBody Expense expense) throws URISyntaxException{
+        Expense result= repo.save(expense);
+        return ResponseEntity.created(new URI("/api/expenses" + result.getId())).body(result);
     }
 }

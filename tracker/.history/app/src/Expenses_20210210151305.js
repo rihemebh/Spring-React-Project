@@ -9,8 +9,11 @@ import {Link} from 'react-router-dom'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Moment from 'react-moment';
-
-
+/*"id":100,
+"expensedate":"2019-06-16T17:00:00Z",
+"description":"New York Business Trip",
+"location":"New York",
+"category":{"id":1,"name":"Travel"}}*/
 export class Expenses extends Component {
     EmptyItem={
         id : '103',
@@ -45,12 +48,14 @@ async componentDidMount(){
     handleChange = (event)=>{
         console.log(event);
       const target = event.target;
-      const value = target.value;
-      const name = target.name;
-      console.log(target);
+      const value = event.value;
+      const name = event.name;
+
       let item = {...this.state.item};
       item[name]= value;
       this.setState({item});
+      console.log(item);
+    
     }
 
     handleDateChange(date){
@@ -66,27 +71,29 @@ async componentDidMount(){
         await fetch('/api/expenses', {
             method : "POST",
            headers :{
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+               'content-Type': "text/plain",
            },
            body : JSON.stringify(item),
         }
        
         );
+
+        console.log(this.state);
         this.props.history.push("/expenses"); // route
        }
 
     async remove(id){
-        await fetch(`/api/expenses/${id}`, {
+        await fetch('/api/expenses/${id}', {
             method : 'DELETE',
             headers : {
                 'Accept' : "application/json",
                 "content-Type" : "application/json",
             }
-        }).then(() => {
-            let updatedExpenses = [...this.state.expenses].filter(i => i.id !== id);
-            this.setState({expenses : updatedExpenses});
-          });
+        }).then(()=>{
+            let updatedExpenses = [...this.state.expenses].filter (i => i.id === id);
+            this.setState({Expenses : updatedExpenses })
+        })
+
        
     }
 
@@ -140,11 +147,6 @@ async componentDidMount(){
                             <Label  for="location">Location </Label>
                             <br/>
                             <Input type="text" name="location" id="location" onChange={this.handleChange} ></Input>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label  for="location">description </Label>
-                            <br/>
-                            <Input type="text" name="desc" id="desc" onChange={this.handleChange} ></Input>
                         </FormGroup>
                         <FormGroup>
                             <Button color="primary" type="submit">Save</Button>{' '}

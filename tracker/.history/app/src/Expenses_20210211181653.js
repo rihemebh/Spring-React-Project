@@ -46,11 +46,13 @@ async componentDidMount(){
         console.log(event);
       const target = event.target;
       const value = target.value;
-      const name = target.name;
-      console.log(target);
+      const name = event.name;
+
       let item = {...this.state.item};
       item[name]= value;
       this.setState({item});
+      console.log(item);
+    
     }
 
     handleDateChange(date){
@@ -140,11 +142,6 @@ async componentDidMount(){
                             <Label  for="location">Location </Label>
                             <br/>
                             <Input type="text" name="location" id="location" onChange={this.handleChange} ></Input>
-                        </FormGroup>
-                        <FormGroup>
-                            <Label  for="location">description </Label>
-                            <br/>
-                            <Input type="text" name="desc" id="desc" onChange={this.handleChange} ></Input>
                         </FormGroup>
                         <FormGroup>
                             <Button color="primary" type="submit">Save</Button>{' '}

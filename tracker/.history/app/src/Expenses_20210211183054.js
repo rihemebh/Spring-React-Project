@@ -51,6 +51,7 @@ async componentDidMount(){
       let item = {...this.state.item};
       item[name]= value;
       this.setState({item});
+    
     }
 
     handleDateChange(date){
